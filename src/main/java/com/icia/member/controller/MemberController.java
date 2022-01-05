@@ -2,6 +2,8 @@ package com.icia.member.controller;
 
 import com.icia.member.dto.MemberLoginDTO;
 import com.icia.member.dto.MemberSaveDTO;
+import com.icia.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/member/*")
+@RequiredArgsConstructor // final 키워드가 붙은 필드만으로 생성자를 만들어줌
 public class MemberController {
+
+    private final MemberService ms;
 
     @GetMapping("save")
     public String saveForm(Model model) {
@@ -30,24 +35,26 @@ public class MemberController {
             return "member/save";
         }
 
-        return "member/login";
+        ms.save(memberSaveDTO);
+
+        return "redirect:/member/login";
     }
 
     @GetMapping("login")
     public String loginForm(Model model) {
-        model.addAttribute("member", new MemberLoginDTO());
+        model.addAttribute("memberLogin", new MemberLoginDTO());
 
         return "member/login";
     }
 
     @PostMapping("login")
-    public String login(@Validated @ModelAttribute("member") MemberLoginDTO memberLoginDTO, BindingResult bindingResult) {
+    public String login(@Validated @ModelAttribute("memberLogin") MemberLoginDTO memberLoginDTO, BindingResult bindingResult) {
         System.out.println("memberLoginDTO = " + memberLoginDTO);
         if(bindingResult.hasErrors()) {
             return "member/login";
         }
 
-        return "index";
+        return "redirect:/member/findAll";
     }
 
 

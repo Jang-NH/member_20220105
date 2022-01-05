@@ -13,7 +13,7 @@
 <body>
 <h2>로그인 페이지</h2>
 
-<form action="/member/login" method="post" th:object="${member}">
+<form action="/member/login" method="post" th:object="${memberLogin}">
     <input type="text" th:field="*{memberEmail}" placeholder="이메일"> <br>
         <p th:if="${#fields.hasErrors('memberEmail')}" th:errors="*{memberEmail}" th:errorclass="field-error"></p>
     <input type="password" th:field="*{memberPassword}" placeholder="비밀번호"> <br>
